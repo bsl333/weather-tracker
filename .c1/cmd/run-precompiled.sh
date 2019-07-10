@@ -1,1 +1,1 @@
-echo "Project has not been initialized." && exit 1
+npm start

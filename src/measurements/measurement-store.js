@@ -1,5 +1,6 @@
 import { Measurement } from './measurement';
 import { HttpError } from '../errors';
+import constants from '../constants/constants';
 
 // NOTE:
 //  Chose to use a map over an array or object
@@ -31,9 +32,30 @@ export function fetch(timestamp) {
 
 /**
  * Get the measurements within the given date range
- * @param {Date} start Lower bound for the query, inclusive
- * @param {Date} end Upper bound for the query, exclusive
+ * @param {Date} from Lower bound for the query, inclusive
+ * @param {Date} to Upper bound for the query, exclusive
  */
 export function queryDateRange(from, to) {
-  throw new HttpError(501);
+  const fromTime = from.getTime();
+  const toTime = to.getTime();
+  if (isNaN(toTime) || isNaN(fromTime)) {
+    throw new HttpError(400, constants.INVALID_TIMESTAMP);
+  }
+
+  const measurements = [];
+  for (const measurement of store.values()) {
+    const time = measurement.timestamp.getTime();
+    if (time >= fromTime && time < toTime) {
+      measurements.push(measurement)
+    };
+    // Assumption: Here I am assuming records are stored in chronological order
+    // If this is not the case, this line needs to be removed. Otherwise,
+    // as the data set grows, this will help optimize this function since we can't have
+    // a matching record if we exceed the upper bound for the date range.
+    if (time >= toTime) {
+      break;
+    }
+  }
+
+  return measurements;
 }

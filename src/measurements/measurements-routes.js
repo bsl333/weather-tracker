@@ -2,19 +2,21 @@ import express from 'express';
 import * as store from './measurement-store';
 import { Measurement } from './measurement';
 import { HttpError } from '../errors';
+import constants from '../constants/constants'
 
 const router = express.Router();
-
 export function register(app) {
   app.use('/measurements', router);
 }
 
 router.post('/', (req, res) => {
-  const measurement = parseMeasurement(req.body);
-
-  store.add(measurement);
-
-  res.location(`/measurements/${measurement.timestamp.toISOString()}`).sendStatus(201);
+  try {
+    const measurement = parseMeasurement(req.body);
+    store.add(measurement);
+    res.location(`/measurements/${measurement.timestamp.toISOString()}`).sendStatus(201);
+  } catch (e) {
+    res.status(e.status).send({ error: `${e.message}: ${e.additionalInfo}.` });
+  }
 });
 
 router.get('/:timestamp', (req, res) => {
@@ -27,13 +29,13 @@ function parseMeasurement({ timestamp, ...metrics }) {
   const measurement = new Measurement();
   measurement.timestamp = new Date(timestamp);
 
-  if (isNaN(measurement.timestamp)) throw new HttpError(400);
+  if (isNaN(measurement.timestamp)) throw new HttpError(400, constants.INVALID_TIMESTAMP);
 
   for (const metric in metrics) {
     if (!metrics.hasOwnProperty(metric)) continue;
 
     const value = metrics[metric];
-    if (isNaN(value)) throw new HttpError(400);
+    if (isNaN(value)) throw new HttpError(400, constants.INVALID_PROPERTY_TYPE + metric);
 
     measurement.setMetric(metric, +value);
   }

@@ -11,13 +11,14 @@ export function register(app) {
 router.get('/', (req, res) => {
   const metrics = asArray(req.query.metric);
   const stats = asArray(req.query.stat);
-
   const fromDateTime = new Date(req.query.fromDateTime);
   const toDateTime = new Date(req.query.toDateTime);
-
-  const measurements = queryDateRange(fromDateTime, toDateTime);
-
-  res.json(computeStats(measurements, metrics, stats));
+  try {
+    const measurements = queryDateRange(fromDateTime, toDateTime);
+    res.json(computeStats(measurements, metrics, stats));
+  } catch (e) {
+    res.status(e.status).send({ error: `${e.message}: ${e.additionalInfo}.` });
+  }
 });
 
 function asArray(val) {

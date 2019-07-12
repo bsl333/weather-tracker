@@ -1,4 +1,6 @@
 import { Measurement } from '../measurements/measurement';
+import { HttpError } from '../errors';
+import errorMessages from '../constants/constants';
 
 /**
  * Compute statistics for given measurements
@@ -9,14 +11,13 @@ import { Measurement } from '../measurements/measurement';
  */
 
 export function computeStats(measurements, metrics, stats) {
-  if (!measurements.length || !metrics || !stats) {
-    return [];
-  }
+  if (!stats) throw new HttpError(400, errorMessages.MISSING_STATS);
+  if (!metrics) throw new HttpError(400, errorMessages.MISSING_METRICS);
+  if (!measurements.length) return [];
 
   return metrics.reduce((acc, metric) => {
     const cleansedData = cleanseData(measurements, metric);
     if (!cleansedData.length) return acc;
-
     stats.forEach(stat => {
       acc.push({
         metric,
@@ -30,8 +31,6 @@ export function computeStats(measurements, metrics, stats) {
 
 /**
  * Object that contains helper functions to calculate various stats
- * Note: opted not to use arrow functions to allow this.existingMethod
- *       to always work, in case new calculations require use of existing methods.
  */
 const statsFunctions = {
   max(data) {

@@ -47,9 +47,10 @@ const statsFunctions = {
   }
 }
 /**
+ * Removes undefined data, then map remaining measurement values to an array.
  * @param {Measurement[]} measurements
  * @param {String} metric
- * @return {Number[]}
+ * @return {Number[]} an array of numbers
  */
 function cleanseData(measurements, metric) {
   return measurements

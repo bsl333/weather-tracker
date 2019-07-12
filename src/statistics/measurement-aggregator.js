@@ -9,7 +9,6 @@ import errorMessages from '../constants/constants';
  * @param {String[]} stats
  * @return {Object[]} objects storing statistical information for given stats and metrics
  */
-
 export function computeStats(measurements, metrics, stats) {
   if (!stats) throw new HttpError(400, errorMessages.MISSING_STATS);
   if (!metrics) throw new HttpError(400, errorMessages.MISSING_METRICS);
@@ -22,16 +21,14 @@ export function computeStats(measurements, metrics, stats) {
       acc.push({
         metric,
         stat,
-        value: +statsFunctions[stat](cleansedData).toFixed(1)
+        value: calculateStat(stat, cleansedData)
       });
     });
     return acc;
   }, []);
 }
 
-/**
- * Object that contains helper functions to calculate various stats
- */
+// Helper functions to calculate various stats
 const statsFunctions = {
   max(data) {
     return Math.max(...data);
@@ -44,6 +41,17 @@ const statsFunctions = {
   average(data) {
     return data.reduce((acc, val) => acc + val) / data.length;
   }
+}
+/**
+ * Calcuate the stat if it exists or return a defualt string
+ * @param {String} stat
+ * @param {Number[]} data
+ * @returns {Number|String} calculated value or "Cannot perform {stat}"
+ */
+function calculateStat(stat, data) {
+  stat = stat.toLowerCase();
+  if (statsFunctions[stat]) return +statsFunctions[stat](data).toFixed(1);
+  else return `${errorMessages.CANNOT_PERFORM} ${stat}`;
 }
 /**
  * Removes undefined data, then map remaining measurement values to an array.

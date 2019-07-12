@@ -140,7 +140,7 @@ Feature: Get measurement statistics
     Then the response has a status code of 400
     And the response body is:
       | error                                   |
-      | "Bad Request: Missing or invalid stats" |
+      | "Bad Request: Missing stats" |
 
   @new
   Scenario: Get a stat operation that is not defined (integrate).
@@ -152,6 +152,6 @@ Feature: Get measurement statistics
       | fromDateTime | 2015-09-01T16:00:00.000Z |
       | toDateTime   | 2015-09-01T17:00:00.000Z |
     Then the response has a status code of 200
-    And the response body is:
+    And the response body is an array of:
       | metric        | stat        | value                      |
       | "temperature" | "integrate" | "Cannot perform integrate" |

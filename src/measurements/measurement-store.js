@@ -41,6 +41,9 @@ export function queryDateRange(from, to) {
   if (isNaN(toTime) || isNaN(fromTime)) {
     throw new HttpError(400, constants.INVALID_TIMESTAMP);
   }
+  if (fromTime >= toTime) {
+    throw new HttpError(400, constants.INVALID_DATE_RANGE);
+  }
 
   const measurements = [];
   for (const measurement of store.values()) {

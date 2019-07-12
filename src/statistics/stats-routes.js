@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     const measurements = queryDateRange(fromDateTime, toDateTime);
     res.json(computeStats(measurements, metrics, stats));
   } catch (e) {
-    res.status(e.status).send({ error: `${e.message}: ${e.additionalInfo}.` });
+    res.status(e.status).send({ error: `${e.message}: ${e.additionalInfo}` });
   }
 });
 

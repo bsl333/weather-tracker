@@ -12,6 +12,41 @@ Feature: Get measurement statistics
       | "2015-09-01T16:40:00.000Z" | 27.2        |          |
       | "2015-09-01T17:00:00.000Z" | 28.1        | 18.3     |
 
+  @new
+  Scenario: Get stats with an invalid date range (fromDateTime is larger than toDateTime)
+    # GET /stats?<params...>
+    When I get stats with parameters:
+      | param        | value                    |
+      | stat         | min                      |
+      | stat         | max                      |
+      | stat         | average                  |
+      | metric       | temperature              |
+      | metric       | dewPoint                 |
+      | metric       | precipitation            |
+      | fromDateTime | 2016-09-01T16:00:00.000Z |
+      | toDateTime   | 2015-09-01T17:00:00.000Z |
+    Then the response has a status code of 400
+    And the response body is:
+      | error                                                |
+      | "Bad Request: Start time must be less than end time" |
+
+  @new
+  Scenario: Get stats with a missing toDateTime (or missing fromDateTime)
+    # GET /stats?<params...>
+    When I get stats with parameters:
+      | param      | value                    |
+      | stat       | min                      |
+      | stat       | max                      |
+      | stat       | average                  |
+      | metric     | temperature              |
+      | metric     | dewPoint                 |
+      | metric     | precipitation            |
+      | toDateTime | 2015-09-01T17:00:00.000Z |
+    Then the response has a status code of 400
+    And the response body is:
+      | error                                       |
+      | "Bad Request: Invalid or Missing timestamp" |
+
   Scenario: Get stats for a well-reported metric
     # GET /stats?<params...>
     When I get stats with parameters:
@@ -30,7 +65,7 @@ Feature: Get measurement statistics
       | "temperature" | "average" | 27.3  |
 
   Scenario: Get stats for a sparsely reported metric
-     # GET /stats?<params...>
+    # GET /stats?<params...>
     When I get stats with parameters:
       | param        | value                    |
       | stat         | min                      |

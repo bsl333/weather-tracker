@@ -15,7 +15,7 @@ router.post('/', (req, res) => {
     store.add(measurement);
     res.location(`/measurements/${measurement.timestamp.toISOString()}`).sendStatus(201);
   } catch (e) {
-    res.status(e.status).send({ error: `${e.message}: ${e.additionalInfo}.` });
+    res.status(e.status).send({ error: `${e.message}: ${e.additionalInfo}` });
   }
 });
 
@@ -35,7 +35,10 @@ function parseMeasurement({ timestamp, ...metrics }) {
     if (!metrics.hasOwnProperty(metric)) continue;
 
     const value = metrics[metric];
-    if (isNaN(value)) throw new HttpError(400, constants.INVALID_PROPERTY_TYPE + metric);
+    // ensure an empty string throws an erorr.
+    if (isNaN(value) || value === '') {
+      throw new HttpError(400, metric + constants.INVALID_PROPERTY_TYPE);
+    }
 
     measurement.setMetric(metric, +value);
   }

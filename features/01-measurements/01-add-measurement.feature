@@ -16,6 +16,20 @@ Feature: Add a measurement
       | timestamp                  | temperature    | dewPoint | precipitation |
       | "2015-09-01T16:00:00.000Z" | "not a number" | 16.7     | 0             |
     Then the response has a status code of 400
+    And the response body is:
+      | error                                       |
+      | "Bad Request: temperature must be a number" |
+
+  @new
+  Scenario: Cannot add a measurement with an empty value
+    # POST /measurements
+    When I submit a new measurement as follows:
+      | timestamp                  | temperature | dewPoint | precipitation |
+      | "2015-09-01T16:00:00.000Z" | ""          | 16.7     | 0             |
+    Then the response has a status code of 400
+    And the response body is:
+      | error                                       |
+      | "Bad Request: temperature must be a number" |
 
   Scenario: Cannot add a measurement without a timestamp
     # POST /measurements
@@ -23,3 +37,6 @@ Feature: Add a measurement
       | temperature | dewPoint | precipitation |
       | 27.1        | 20       | 0             |
     Then the response has a status code of 400
+    And the response body is:
+      | error                                       |
+      | "Bad Request: Invalid or Missing timestamp" |

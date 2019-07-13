@@ -7,7 +7,7 @@ import errorMessages from '../constants/constants';
  * @param {Measurement[]} measurements
  * @param {String[]} metrics
  * @param {String[]} stats
- * @return {Object[]} objects storing statistical information for given stats and metrics
+ * @return {Object[]} arary of objects storing statistical information for given stats and metrics
  */
 export function computeStats(measurements, metrics, stats) {
   if (!stats) throw new HttpError(400, errorMessages.MISSING_STATS);

@@ -27,6 +27,7 @@ export function fetch(timestamp) {
  * Get the measurements within the given date range
  * @param {Date} from Lower bound for the query, inclusive
  * @param {Date} to Upper bound for the query, exclusive
+ * @returns {Measurement[]} measurements that fall within date range.
  */
 export function queryDateRange(from, to) {
   const fromTime = from.getTime();

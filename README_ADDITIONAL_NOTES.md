@@ -1,0 +1,6 @@
+#### Assumptions Made:
+1. I was not sure if the Raspberry Pi would send an instrument's data if the instrument did not report data. For example, if the precipitation instrument did not report anything, I was not sure if the body would default that precipitation value to an empty string, or just not include it at all. To protect against the event an empty string may get sent, I wrote logic in the code to protect against that, and validated it with an additional scenario. Another way to handle this would be to skip if the value is empty, but I decided to keep the pattern with invoking an error if the data wasn't valid.
+
+#### Additional Notes:
+1. Used a map over an object to store measurements since order is preserved in a map, which allowed the program to break out of the loop once the toTime has been reached in queryDateRange function.
+2. If a user passes in a stat function that is not defined (used integrate as test case), decided not to error the program, but to notify the user that the stat could not be calculated. Decided this because they may pass in numerous valid stats and a bad stat (perhaps due to misspelling), and would be adequately informed that one stat was bad while the report as expected. Alternatively, I considered filtering out stats that aren't defined, but went with this since I thought it to be the most useful

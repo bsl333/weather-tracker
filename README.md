@@ -1,3 +1,6 @@
+### Purpose
+Capture and store (in memory) measurement data sent from a Raspberry Pi.
+
 ### Getting started
 To install dependencies
 
@@ -19,4 +22,26 @@ To rebuild project after any changes are saved:
     npm run dev
 
 ### API Documentation
-[See postman Docs](https://documenter.getpostman.com/view/623338/SVSGQBKM)
+See and run examples via **[Postman Docs](https://documenter.getpostman.com/view/623338/SVSGQBKM)**
+Exposed API routes:
+| Method | Path                     | function                                       | Notes                                                                                              |
+|--------|--------------------------|------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| POST   | /measurements            | post a new measurement                         | metric values (excluding timestamp) must be numbers (Raspberry Pi sends as floating-point decimal) |
+| GET    | /measurements/:timestamp | retreive a single measurement                  | timestamp type: DateTime in UTC ISO-8061 format                                                    |
+| GET    | /stats?<params>          | perform statistical analysis over a date range | params can take on the following values (see below)                                                |
+**<params>**
+| Query Param  | Meaning                                    | Values Supported                                                                 |
+|--------------|--------------------------------------------|----------------------------------------------------------------------------------|
+| stat         | stat value to perform group of metrics     | min, max, or average (can be repeated for multiple statistics)                   |
+| metric       | mertric to perfrom statistical analysis on | See additional notes for values supported (can be repeated for multiple metrics) |
+| fromDateTime | start date                                 | DateTime in UTC ISO-8061 format                                                  |
+| toDateTime   | end date                                   | DateTime in UTC ISO-8061 format                                                  |
+
+#### Additional Notes:
+Raspberry Pi currently sends the following data, but API is built to handle new data as well.
+| Metric Name   | Type     | Example                    | Notes                                    |
+|---------------|----------|----------------------------|------------------------------------------|
+| timestamp     | DateTime | "2015-09-01T16:00:00.000Z" | Always sent as an ISO-8061 string in UTC |
+| temperature   | float    | 22.4                       | in ° C                                   |
+| dewPoint      | float    | 18.6                       | in ° C                                   |
+| precipitation | float    | 142.2                      | in mm                                    |

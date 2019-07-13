@@ -2,13 +2,6 @@ import { Measurement } from './measurement';
 import { HttpError } from '../errors';
 import constants from '../constants/constants';
 
-// NOTE:
-//  Chose to use a map over an array or object
-//    1) Achieve O(1) look up times for a single record. Would be O(n) for an array
-//    2) Query date range function could be optimized.
-//        - If records are inserted sequentially,then we can stop looking thru map
-//          once 'to' value has been found. Map guarantees
-//          insertion order and objects do not.
 const store = new Map();
 
 /**
@@ -48,15 +41,11 @@ export function queryDateRange(from, to) {
   const measurements = [];
   for (const measurement of store.values()) {
     const time = measurement.timestamp.getTime();
+    // Can exit loop since records are stored in chronological order
+    if (time >= toTime) break;
+
     if (time >= fromTime && time < toTime) {
-      measurements.push(measurement)
-    };
-    // Assumption: Here I am assuming records are stored in chronological order
-    // If this is not the case, this line needs to be removed. Otherwise,
-    // as the data set grows, this will help optimize this function since we can't have
-    // a matching record if we exceed the upper bound for the date range.
-    if (time >= toTime) {
-      break;
+      measurements.push(measurement);
     }
   }
 

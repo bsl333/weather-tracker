@@ -23,6 +23,9 @@ To rebuild project after any changes are saved:
 
 ### API Documentation
 See and run examples via **[Postman Docs](https://documenter.getpostman.com/view/623338/SVSGQBKM)**
+You can also find the Postman Collection in the postman directory.
+To open, open postman, import the collection and environemt and make sure set the environment variable to "capital-one-weather-tracker-local-dev". Then you can run the examples locally.
+
 Exposed API routes:
 | Method | Path                     | function                                       | Notes                                                                                              |
 |--------|--------------------------|------------------------------------------------|----------------------------------------------------------------------------------------------------|
@@ -41,7 +44,7 @@ Exposed API routes:
 Raspberry Pi currently sends the following data, but API is built to handle new data as well.
 | Metric Name   | Type     | Example                    | Notes                                    |
 |---------------|----------|----------------------------|------------------------------------------|
-| timestamp     | DateTime | "2015-09-01T16:00:00.000Z" | Always sent as an ISO-8061 string in UTC |
+| timestamp     | DateTime | "2019-07-12T07:32:03.453Z" | Always sent as an ISO-8061 string in UTC |
 | temperature   | float    | 22.4                       | in ° C                                   |
 | dewPoint      | float    | 18.6                       | in ° C                                   |
 | precipitation | float    | 142.2                      | in mm                                    |

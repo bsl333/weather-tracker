@@ -1,0 +1,466 @@
+{
+	"info": {
+		"_postman_id": "de6362f3-19f7-4e1d-b97d-023697ce1d19",
+		"name": "capital-one-weather-tracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add new measurement",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1165905b-97b9-4df8-9af9-172b44be9142",
+						"exec": [
+							"pm.sendRequest(\"https://postman-echo.com/get\", function (err, response) {",
+							"    console.log(response.json());",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timestamp\": \"{{timestamp}}\",\n    \"temperature\": \"{{temperature}}\",\n    \"dewPoint\": \"{{dewPoint}}\",\n    \"precipitation\": \"{{precipitation}}\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/measurements",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"measurements"
+					]
+				},
+				"description": "Add a new measurement to the measurement store.\n\nMust pass timestamp in format: DateTime: UTC ISO-8061\n\nMetrics are sent as body params as a floating-point number.\n\n| Metric Name   | Type     | Example                    | Notes                                    |\n|---------------|----------|----------------------------|------------------------------------------|\n| timestamp     | DateTime | \"2019-07-12T07:32:03.453Z\" | Always sent as an ISO-8061 string in UTC |\n| temperature   | float    | 22.4                       | in ° C                                   |\n| dewPoint      | float    | 18.6                       | in ° C                                   |\n| precipitation | float    | 142.2                      | in mm                                    |\n\n\nExample below"
+			},
+			"response": [
+				{
+					"name": "Add new measurement",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"timestamp\": \"2019-07-12T07:32:03.453Z\",\n    \"temperature\": 22.7,\n    \"precipitation\": 5.5\n}"
+						},
+						"url": {
+							"raw": "{{url}}/measurements",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"measurements"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Location",
+							"value": "/measurements/2019-07-12T07:32:03.453Z"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "7"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"7-rM9AyJuqT6iOan/xHh+AW+7K/T8\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 12 Jul 2019 19:59:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "Created"
+				}
+			]
+		},
+		{
+			"name": "Fetch one measurement",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/measurements/{{timestamp}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"measurements",
+						"{{timestamp}}"
+					]
+				},
+				"description": "Send a request with a timestamp as part of url,\nreturns resulting measurement if found.\n\ntimestamp format: DateTime: UTC ISO-8061"
+			},
+			"response": [
+				{
+					"name": "Fetch one measurement",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/measurements/2019-07-12T07:32:03.453Z",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"measurements",
+								"2019-07-12T07:32:03.453Z"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "97"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"61-fFo4pEwZtAGFRHFXfU7PHiBs7xg\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 13 Jul 2019 01:50:03 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"timestamp\": \"2019-07-12T07:32:03.453Z\",\n    \"temperature\": 22.4,\n    \"dewPoint\": 18.6,\n    \"precipitation\": 142.2\n}"
+				}
+			]
+		},
+		{
+			"name": "Fetch statistical information  for a single stat and metric",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/stats?stat={{stat1}}&metric={{metric1}}&fromDateTime={{fromDateTime}}&toDateTime={{ToDateTime}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "stat",
+							"value": "{{stat1}}"
+						},
+						{
+							"key": "metric",
+							"value": "{{metric1}}"
+						},
+						{
+							"key": "fromDateTime",
+							"value": "{{fromDateTime}}",
+							"description": "DateTime in UTC ISO-8061"
+						},
+						{
+							"key": "toDateTime",
+							"value": "{{ToDateTime}}",
+							"description": "DateTime in UTC ISO-8061"
+						}
+					]
+				},
+				"description": "Send a valid fromDateTime and toDateTime as query params along wtih stat information you would like for a given metric. \n\nExample below:"
+			},
+			"response": [
+				{
+					"name": "Fetch statistical information  for a single stat and metric",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/stats?stat={{stat1}}&metric={{metric1}}&fromDateTime={{fromDateTime}}&toDateTime={{ToDateTime}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "stat",
+									"value": "{{stat1}}"
+								},
+								{
+									"key": "metric",
+									"value": "{{metric1}}"
+								},
+								{
+									"key": "fromDateTime",
+									"value": "{{fromDateTime}}",
+									"description": "DateTime in UTC ISO-8061"
+								},
+								{
+									"key": "toDateTime",
+									"value": "{{ToDateTime}}",
+									"description": "DateTime in UTC ISO-8061"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "52"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"34-EGa7zzcrlF9mvXdmi0QF1zgVrhE\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 13 Jul 2019 03:01:01 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"metric\": \"temperature\",\n        \"stat\": \"min\",\n        \"value\": 22.4\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Fetch statistical information for multiple stats and metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/stats?stat={{stat1}}&stat={{stat2}}&stat={{stat3}}&metric={{metric1}}&metric={{metric2}}&fromDateTime={{fromDateTime}}&toDateTime={{ToDateTime}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "stat",
+							"value": "{{stat1}}"
+						},
+						{
+							"key": "stat",
+							"value": "{{stat2}}"
+						},
+						{
+							"key": "stat",
+							"value": "{{stat3}}"
+						},
+						{
+							"key": "metric",
+							"value": "{{metric1}}"
+						},
+						{
+							"key": "metric",
+							"value": "{{metric2}}"
+						},
+						{
+							"key": "fromDateTime",
+							"value": "{{fromDateTime}}",
+							"description": "DateTime in UTC ISO-8061"
+						},
+						{
+							"key": "toDateTime",
+							"value": "{{ToDateTime}}",
+							"description": "DateTime in UTC ISO-8061"
+						}
+					]
+				},
+				"description": "Send a valid fromDateTime and toDateTime as query params along wtih stats information you would like for given metrics.\n\n**Note**: two metrics were submitted which is why there are different min, and max values. To do this, run the add new measurement request and set new values.\n\nExample request."
+			},
+			"response": [
+				{
+					"name": "Fetch statistical information for multiple stats and metrics",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/stats?stat={{stat1}}&stat={{stat2}}&stat={{stat3}}&metric={{metric1}}&metric={{metric2}}&fromDateTime={{fromDateTime}}&toDateTime={{ToDateTime}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stats"
+							],
+							"query": [
+								{
+									"key": "stat",
+									"value": "{{stat1}}"
+								},
+								{
+									"key": "stat",
+									"value": "{{stat2}}"
+								},
+								{
+									"key": "stat",
+									"value": "{{stat3}}"
+								},
+								{
+									"key": "metric",
+									"value": "{{metric1}}"
+								},
+								{
+									"key": "metric",
+									"value": "{{metric2}}"
+								},
+								{
+									"key": "fromDateTime",
+									"value": "{{fromDateTime}}",
+									"description": "DateTime in UTC ISO-8061"
+								},
+								{
+									"key": "toDateTime",
+									"value": "{{ToDateTime}}",
+									"description": "DateTime in UTC ISO-8061"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "324"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"144-YDK+v93nTiVB0zf/2YoEZvVHqGo\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 13 Jul 2019 03:02:26 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"metric\": \"temperature\",\n        \"stat\": \"min\",\n        \"value\": 22.4\n    },\n    {\n        \"metric\": \"temperature\",\n        \"stat\": \"max\",\n        \"value\": 22.4\n    },\n    {\n        \"metric\": \"temperature\",\n        \"stat\": \"average\",\n        \"value\": 22.4\n    },\n    {\n        \"metric\": \"precipitation\",\n        \"stat\": \"min\",\n        \"value\": 142.2\n    },\n    {\n        \"metric\": \"precipitation\",\n        \"stat\": \"max\",\n        \"value\": 142.2\n    },\n    {\n        \"metric\": \"precipitation\",\n        \"stat\": \"average\",\n        \"value\": 142.2\n    }\n]"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "5f34aaa1-c331-4c79-b5c6-d33b9188f60e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "82c51492-06ee-4632-91af-918f7849eaeb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
